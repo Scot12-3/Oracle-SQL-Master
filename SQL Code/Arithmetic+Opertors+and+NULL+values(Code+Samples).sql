@@ -1,0 +1,13 @@
+SELECT * FROM employees;
+SELECT employee_id, salary, salary*12 as annual_salary FROM employees;
+SELECT employee_id, salary, salary+100*12 as annual_salary FROM employees;
+SELECT employee_id, salary, (salary+100)*12 as annual_salary FROM employees;
+SELECT sysdate FROM dual;
+SELECT sysdate + 4 FROM dual;
+SELECT employee_id, hire_date, hire_date+5 FROM employees;
+SELECT salary, salary*commission_pct, commission_pct FROM employees;
+select salary, salary/0 from employees;
+SELECT employee_id, salary, salary*NULL as annual_salary FROM employees;
+SELECT employee_id, salary, (salary+NULL)*12 as annual_salary FROM employees;
+SELECT employee_id, salary, salary+100*NULL as annual_salary FROM employees;
+SELECT employee_id, salary, salary+NVL(commission_pct,0)*100*12 as annual_salary FROM employees;
