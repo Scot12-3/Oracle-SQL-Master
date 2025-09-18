@@ -18,9 +18,4 @@ Learn To:
 ## Class
 https://www.udemy.com/course/oracle-sql-12c-become-an-sql-developer-with-subtitle/learn/lecture/11351652#overview
 
-##PDF Resources
-[[ORACLE][Sample Schemas].pdf](https://github.com/user-attachments/files/21323062/ORACLE.Sample.Schemas.pdf)
-[[ORACLE][Pro Oracle SQL].pdf](https://github.com/user-attachments/files/21323064/ORACLE.Pro.Oracle.SQL.pdf)
-[OracleDatabaseNotesForProfessionals.pdf](https://github.com/user-attachments/files/21323065/OracleDatabaseNotesForProfessionals.pdf)
-[sql-language-reference.pdf](https://github.com/user-attachments/files/21323066/sql-language-reference.pdf)
-[SQLNotesForProfessionals.pdf](https://github.com/user-attachments/files/21323068/SQLNotesForProfessionals.pdf)
+
