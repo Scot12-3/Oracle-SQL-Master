@@ -1,0 +1,1083 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Learnings</title>
+    </head>
+    <body>
+    <h1>Python/Other ComSci</h1>
+<p> </p>
+<p> </p>
+<p></p>
+
+
+
+
+<hr>
+
+<h1>BOOT.DEV</h1>
+<p><a href="https://www.boot.dev/pricing">Pricing | Boot.dev</a></p>
+<p>Explain the solution to this multiple choice question, I don't quite understand why this is the answer.</p>
+<p>Great question! Let me explain why the answer is <b>False</b>.</p>
+<p>The statement "Functions must be defined in the order that they call each other" is incorrect because of how Python's function definition and execution work.</p>
+<p>Here's the key insight from the lesson:</p>
+<p><b>Functions only need to be defined BEFORE they are CALLED, not before they reference each other.</b></p>
+<p>Let's look at the example from the lesson:</p>
+<pre><code>def main():
+health = 10
+armor = 5
+add_armor(health, armor)  # calls add_armor
+def add_armor(h, a):
+new_health = h + a
+print_health(new_health)  # calls print_health
+def print_health(new_health):
+print(f"The player now has {new_health} health")
+</code></pre><h1>         #call entrypoint last</h1>
+<pre><code>main()
+</code></pre><p>Notice that:</p>
+<ul><li>main() calls add_armor(), but add_armor() is defined AFTER main()</li>
+<li>add_armor() calls print_health(), but print_health() is defined AFTER add_armor()</li>
+</ul><p>This works perfectly fine! Why? Because when Python reads the file, it first defines all the functions (reads their definitions into memory), and THEN it executes main(). By the time any function is actually called, all the other functions have already been defined.</p>
+<p>The trick is putting the actual function call (main()) at the very end. This ensures all functions are defined before any of them start executing.</p>
+<p>So functions don't need to be defined in the order they call each other - they just all need to be defined before the first one is actually executed!</p>
+<p><b>Order of Functions</b></p>
+<p>All functions <i>must</i> be defined before they're used.</p>
+<p>You might think this would make structuring Python code hard because the order of the functions needs to be <i>just right</i>. As it turns out, there's a simple trick that makes it super easy.</p>
+<p>Most Python developers solve this problem by defining <i>all</i> the functions in their program first, then they call an "entry point" function <i>last</i>. That way <i>all</i> of the functions have been read by the Python interpreter before the first one is called.</p>
+<p>Conventionally this "entry point" function is usually called main to keep things simple and consistent.</p>
+<pre><code>def main():
+health = 10
+armor = 5
+add_armor(health, armor)
+def add_armor(h, a):
+new_health = h + a
+print_health(new_health)
+def print_health(new_health):
+print(f"The player now has {new_health} health")
+# call entrypoint last
+main()
+</code></pre><p></p>
+<pre><code>Ah, my young apprentice! I can certainly explain why "Create an entrypoint function (usually called main) and call it at the end of the file" is the best practice for ensuring your functions are defined in the correct order.
+In Python, just like many other programming languages, a function must be defined before it is called. If you try to call a function that Python hasn't "seen" yet, you'll get an error.
+The solution you chose (and the one suggested by the lesson) addresses this by setting up a specific structure:
+1	Define all your functions first: You write out all the separate functions your program will need.
+2	Create an "entry point" function (conventionally main): This function will contain the main logic of your program, and it will call other functions as needed.
+3	Call the main function at the very end of your file: Because the main function is called last, by that point, the Python interpreter will have already read and processed all the function definitions above it. This ensures that when main tries to call other functions, they are already known and defined.
+This approach keeps your code organized and ensures that you avoid "undefined function" errors, as all the necessary functions are declared before main ever attempts to use them.
+Here's the example from the lesson again, highlighting the main() call at the very end:
+def main():
+health = 10
+armor = 5
+add_armor(health, armor) # add_armor is defined above main()
+def add_armor(h, a):
+new_health = h + a
+print_health(new_health) # print_health is defined above add_armor()
+def print_health(new_health):
+print(f"The player now has {new_health} health")
+# This is the crucial part:
+# main() is called only after all other functions (add_armor, print_health)
+# have been defined.
+main()
+Does that make more sense now? If you'd like, I can quiz you on another aspect of function order or explain a different concept!
+Functions Quiz
+Reference the example functions and answer the questions.
+Function Definitions
+def calculate_damage(opening_attack, core_damage, finishing_move):
+total = opening_attack + core_damage + finishing_move
+return total
+def to_celsius(f):
+c = 5 / 9 * (f - 32)
+return c
+
+Function Calls
+damage1 = calculate_damage(10, 20, 30)
+damage2 = calculate_damage(5, 10, 15)
+temp1 = to_celsius(32)
+temp2 = to_celsius(212)
+
+
+Boots
+Spellbook
+Community
+
+￼
+Need help? I, Boots the Gormless Glutton, can assist... for a price.
+
+
+Which keyword is used to create functions in Python?
+function
+func
+fn
+def
+
+A function must be called once to be applied into multiple arguments
+
+</code></pre><h1>None Return</h1>
+<pre><code>When no return value is specified in a function, it will automatically return None. For example, maybe it's a function that prints some text to the console, but doesn't explicitly return a value. The following code snippets all return the same value, None:
+def my_func():
+    print("I do nothing")
+    return None
+
+def my_func():
+    print("I do nothing")
+    return
+
+def my_func():
+    print("I do nothing")
+#what happens if there is no 'return' line in a function?
+the program chrashes?
+it retuns no values,an attempt to capture a return value will result in errors
+itreturns none
+
+What is the difference betrween printing a value and returning it? 
+-Print: Shows a value in the console; Return: Makes a value available to the caller if the function.
+
+Parameters vs. Arguments::
+-Parameters are the names used for inputs when defining a function. Arguments are the values of the inputs supplied when a function is called.
+-To reiterate, arguments are the actual values that go into the function, such as 42.0, "the dark knight", or True. Parameters are the names we use in the function definition to refer to those values, which at the time of writing the function, can be whatever we like.
+-That said, this is all semantics, and frankly developers are really lazy with these definitions. You'll often hear the words "arguments" and "parameters" used interchangeably.
+# a and b are parameters
+def add(a, b):
+    return a + b
+
+# 5 and 6 are arguments
+sum = add(5, 6)
+</code></pre><h1>Let’s clarify the concept behind that multiple choice question.</h1>
+<pre><code>The question was:
+____ are the values that are passed into the function by the caller
+
+The answer is Arguments.
+Here’s why: When you define a function, you use parameters as placeholder names. For example:
+def greet(name):    # "name" is a parameter
+    print("Hello", name)
+
+But when you call the function, you fill in those placeholders with actual values—such as "Boots" in this example:
+greet("Boots")      # "Boots" is the argument
+
+•	name is a parameter (used in the function definition).
+•	"Boots" is an argument (the value supplied to name when the function is called).
+So, the actual values passed in by the caller are called arguments, which is why that’s the correct answer.
+
+
+break down why "Parameters" is the correct answer.
+The key is in understanding the timing and context of when we're talking about these terms:
+Parameters are defined when you're writing/defining the function. They're like placeholders or variable names that you choose ahead of time, before you even know what specific values will be passed in.
+Arguments are the actual values that get passed in when you call/use the function.
+Looking at the example from the lesson:
+# a and b are parameters
+def add(a, b):  # &lt;-- This is the function DEFINITION
+    return a + b
+
+# 5 and 6 are arguments  
+sum = add(5, 6)  # &lt;-- This is the function CALL
+
+The quiz question asks: "______ are the inputs specified by the function definition"
+Since it's asking about what's specified in the function definition (the def add(a, b): line), the answer is Parameters. The a and b are the parameter names you choose when defining the function.
+The arguments (5 and 6) don't exist until someone actually calls the function later.
+Think of it this way:
+•	Parameters = the recipe ingredients list ("2 cups flour, 1 egg")
+•	Arguments = the actual ingredients you use ("2 cups of King Arthur flour, 1 large brown egg")
+The recipe (function definition) specifies the parameter names, but the actual ingredients (arguments) come later when you're cooking (calling the function).
+
+def curse(weapon_damage):
+    lesser_cursed = weapon_damage * .50
+    greater_cursed = weapon_damage * .25
+    return(lesser_cursed, greater_cursed)
+
+# Don't modify below this line
+
+
+def test(weapon_damage):
+    print("Weapon's base damage:", float(weapon_damage))
+    print("Cursing...")
+    lesser_cursed, greater_cursed = curse(weapon_damage)
+    print("With lesser curse the damage is:", float(lesser_cursed), "damage.")
+    print("With greater curse the damage is:", float(greater_cursed), "damage.")
+    print("=====================================")
+
+
+def main():
+    test(100)
+    test(500)
+    test(1000)
+
+
+main()
+
+def enchant_and_attack(target_health, damage, weapon):
+    enchanted_damage = damage + 10
+    new_health = target_health - enchanted_damage
+    enchanted_weapon = "enchanted " + weapon
+    return(enchanted_weapon, new_health)
+
+
+# Don't modify below this line
+
+
+def test(target_health, damage, weapon):
+    print(f"The target has {target_health} health.")
+    print(f"{weapon} base damage: {damage} - Enchanting and attacking.")
+    enchanted_weapon, new_health = enchant_and_attack(target_health, damage, weapon)
+    print(f"The target has been attacked with the {enchanted_weapon}.")
+    print(f"The target has {new_health} health remaining.")
+    print("=====================================")
+
+
+def main():
+    test(100, 50, "sword")
+    test(500, 100, "axe")
+    test(1000, 250, "bow")
+
+
+main()
+</code></pre>
+
+
+
+<hr>
+
+<h1>BOOT.DEV DAY 2</h1>
+<h1><b>Scope</b></h1>
+<p>Scope refers to <i>where</i> a variable or function name is available to be used. For example, when we create variables in a function (such as by giving names to our parameters), that data is <i>not</i> available outside of that function.</p>
+<p><b>Example</b></p>
+<pre><code>def subtract(x, y):
+return x - y
+result = subtract(5, 3)
+print(x)
+</code></pre><h1>ERROR! "name 'x' is not defined"</h1>
+<p>When the subtract function is called, we assign 5 to the variable x, but x only exists in the code <i>within</i> the subtract function. If we try to print x outside of that function, then we won't get a result. In fact, we'll get a big fat error.</p>
+<p></p>
+<p></p>
+<p><b>Assignment</b></p>
+<p>Find the bug in the code on line 10. We're using variable names from the wrong scope. F</p>
+<pre><code>def get_max_health(modifier, level):
+return modifier * level
+
+my_modifier = 5
+my_level = 10
+don't touch above this line
+modifier = 5
+level = 10
+max_health = get_max_health(modifier, level)
+don't touch below this line
+print(f"max_health is: {max_health}")
+</code></pre><h1><b>Global Scope</b></h1>
+<p>So far we've been working in the global scope. That means that when we define a variable or a function, that name is accessible in <i>every other place</i> in our program, even within other functions.</p>
+<p>For example:</p>
+<p>pi = 3.14</p>
+<p>def get_area_of_circle(radius):</p>
+<blockquote><p>return pi * radius * radius</p>
+</blockquote><p>Because pi was declared in the parent "global" scope, it is usable within the get_area_of_circle() function.</p>
+<p><b>Assignment</b></p>
+<p>Let's change how we are calculating our player's stats! The only thing we should need to define globally is the character level and then let our functions do the rest!</p>
+<p>Declare the variable player_level at the top of the global scope and set it to 4.</p>
+<pre><code>player_level = 4
+Don't touch below this line
+
+def calculate_health(modifier):
+return player_level * modifier
+
+def calculate_primary_stats(armor_bonus, modifier):
+return armor_bonus + modifier + player_level
+
+print(f"Character has {calculate_health(10)} max health.")
+print(f"Character has {calculate_primary_stats(3, 8)} primary stats.")
+
+</code></pre><h1><b>Unit Tests</b></h1>
+<p>Up until this point, all the coding lessons you've completed have been testing you based on your code's <i>console output</i> (what's printed). For example, a lesson might expect your code (in conjunction with the code we provide) to print something like:</p>
+<p>Armor: 2</p>
+<p>Health: 18</p>
+<p>If your code prints that <i>exact</i> output, you pass. If it doesn't, you fail.</p>
+<p><b>A New Type of Lesson</b></p>
+<p>Going forward, you'll encounter a new type of lesson: <a href="https://en.wikipedia.org/wiki/Unit_testing">unit tests</a>. A unit test is just an automated program that tests a small "unit" of code. Usually just a function or two. The editor will have tabs: the "main.py" file containing your code, and the "main_test.py" file containing the unit tests.</p>
+<p>These new unit-test-style lessons will test your code's <i>functionality</i> rather than its output. Our tests will call functions in your code with different arguments, and expect certain return values. If your code returns the correct values, you pass. If it doesn't, you fail.</p>
+<p>There are two reasons for this change:</p>
+<blockquote><p>1	It's more realistic. In the real world, you'll be writing unit tests and running them against your code to make sure it works as expected.</p>
+<p>2	You can run and debug your code with print statements, and leave those print statements in when you submit. Unlike the output-based lessons, you won't have to remove your print statements to pass.</p>
+</blockquote><p><b>Assignment</b></p>
+<p>Complete the total_xp function. It accepts two integers as input:</p>
+<ul><li>level</li>
+<li>xp_to_add</li>
+</ul><p>There are 100 xp per level. total_xp should convert the current level to xp, then add this current xp to the xp_to_add argument and return the player's total xp. For example:</p>
+<ul><li>If a player is level 1 and gains 100 xp, they have 200 total xp.</li>
+<li>If a player is level 2 and gains 250 xp, they have 450 total xp.</li>
+<li>If a player is level 170 and gains 590 xp, they have 17590 total xp.</li>
+</ul><p>The pass keyword is a way to tell Python to do nothing. You'll need to replace it with your own code.</p>
+<pre><code>def total_xp(level, xp_to_add):
+xp = level * 100
+xp = xp + xp_to_add
+return xp
+</code></pre><p><b>Two Lesson Types</b></p>
+<p>As we talked about, there are 2 types of coding lessons on Boot.dev:</p>
+<blockquote><p>1	Console output lessons</p>
+<p>2	Unit-test lessons</p>
+</blockquote><p><b>Console Output Lessons</b></p>
+<ul><li>Only 1 file of code, usually with a comment explaining where to write your code</li>
+<li>When you "submit" your code, its console output must match the expected output exactly to pass</li>
+<li>Debug print statements will cause your code to fail submission, so remove them before submitting</li>
+</ul><p><b>Unit-Test Lessons</b></p>
+<ul><li>2 files of code: main and main_test. You can read the tests but you can't edit them</li>
+<li>When you "submit" your code, the return values of your functions must match the expected values exactly to pass</li>
+<li>Console output is ignored, you can leave debug print statements in your code</li>
+</ul><p><b>Which Is More Common?</b></p>
+<p>Going forward, you'll encounter far more unit-test lessons than console output lessons, but you'll still see both from time to time. Different concepts are better suited to different types of lessons.</p>
+<p>What type of lessons can you safely submit with your debug print statements left in your code?</p>
+<p><mark>Unit test</mark></p>
+<p>Console output</p>
+<h1><b>Debugging</b></h1>
+<pre>When you're working as a professional developer, you'll typically write code on your computer and test it by yourself before it's deployed to users.
+That first part of the process is called debugging. You write some code, run it, and if it doesn't work, you fix the bugs. You repeat this process until you're confident that your code works as expected.
+Run vs. Submit
+At Boot.dev, the Run button is for debugging. The Submit button mimics the idea of publishing your code for production use.
+You should be debugging your code using the Run button. You should be adding print() statements to your code to make sure it's doing what you think it's doing at different points in the code.
+Write a line to calculate a value
+print() the value you calculated
+Run the code
+Did it print what you expected? If not, fix it
+Repeat
+You will never lose XP or be penalized on Boot.dev for using the run button. However, there are consequences for submitting broken code, just like there are career consequences for pushing broken code to your users!
+The Submit Button Will Run Additional Tests
+When you use the Run button, a few tests will run against your code. However, the Submit button will run additional tests that you're not able to debug against. That's what keeps it fun and realistic (it's so hard to know what your users will do with your code!).
+Assignment
+Complete the take_magic_damage function. It should return the new health after calculating how much magic-type damage the player takes. Here is a description of the arguments:
+health: The player's starting health
+resist: The player's magic resistance. This reduces the damage they take by a static amount
+amp: The attacker's magic amplification. This increases the damage they deal by a multiplier
+spell_power: The base damage of the spell
+First, calculate the total maximum damage to be inflicted by multiplying the spell_power by the amp. Then, subtract the resist from the total damage to get the actual damage dealt. Apply that damage to the player's health and return the new health.
+</pre><pre><code>def take_magic_damage(health, resist, amp, spell_power):
+max = spell_power * amp
+damage = max - resist
+health = health - damage
+return health
+</code></pre><h1><mark>main_test.py</mark></h1>
+<pre><code>from main import *
+
+run_cases = [
+    (100, 5, 2, 20, 65),
+    (200, 10, 1, 25, 185),
+]
+
+submit_cases = run_cases + [
+    (0, 0, 0, 0, 0),
+    (1, 1, 1, 1, 1),
+    (100, 2, 3, 1, 99),
+    (2500, 3, 2, 2, 2499),
+]
+
+
+def test(input1, input2, input3, input4, expected_output):
+    print("---------------------------------")
+    print(f"Inputs: {input1}, {input2}, {input3}, {input4}")
+    print(f"Expecting: {expected_output}")
+    result = take_magic_damage(input1, input2, input3, input4)
+    print(f"Actual: {result}")
+    if result == expected_output:
+        print("Pass")
+        return True
+    print("Fail")
+    return False
+
+
+def main():
+    passed = 0
+    failed = 0
+    skipped = len(submit_cases) - len(test_cases)
+    for test_case in test_cases:
+        correct = test(*test_case)
+        if correct:
+            passed += 1
+        else:
+            failed += 1
+    if failed == 0:
+        print("============= PASS ==============")
+    else:
+        print("============= FAIL ==============")
+    if skipped &gt; 0:
+        print(f"{passed} passed, {failed} failed, {skipped} skipped")
+    else:
+        print(f"{passed} passed, {failed} failed")
+
+
+test_cases = submit_cases
+if "__RUN__" in globals():
+    test_cases = run_cases
+
+main()
+</code></pre><p></p>
+<p><b>Learning Effectively</b></p>
+<p>This course is about to get a bit <i>harder</i>. There's no way around it, if programming were a walk in the park everyone would be earning 6 figures as a software engineer. But it's not, and to succeed without getting stuck and frustrated, you need to learn how to learn.</p>
+<p><b>Process for Solving Hard Coding Problems</b></p>
+<blockquote><p><b>1	Read the lesson first!</b> Figure out the examples before writing your own code.</p>
+<p><b>2	Read the assignment.</b> Understand the goal of the assignment before you start writing code.</p>
+<p><b>3	Start writing code.</b></p>
+<p><b>4	Add print() statements.</b> Don't wait until you've written a lot of code to start testing. Add print() statements and use the Run button to see if your code is doing what you expect at each step. It's easier to find issues in small bits of code than in large blocks of code.</p>
+</blockquote><ul><ul><li>Keep running, printing, and fixing until you're confident your code is working.</li>
+</ul></ul><blockquote><p><b>5	Submit your code</b>. If the assignment you're working on has unit tests, no need to remove your debugging print() statements. If the assignment you're working on is testing console output, be sure to remove your print() statements before submitting.</p>
+<p><b>6	Compare your code to the instructor's.</b> You will <i>not</i> be penalized for looking at the solution after you have successfully completed the assignment.</p>
+</blockquote><p><b>Additional Tidbits</b></p>
+<ul><li>Try to use Boots before peeking at the solution. Boots is quite good at giving you pointed hints to help you solve the problem on your own.</li>
+<li>It's okay to peek at the solution when you're completely stuck every once in a while, but <i>don't make it a habit</i>. If you find that you're always stuck, you should restart the chapter or course to make sure you understand the material.</li>
+<li>You can reset your code for an assignment with the "reset" ↶ button. For example, maybe you forgot which modifications <i>you</i> made vs which code was left by the instructor.</li>
+<li>You can reset all your cached code from the settings page. This is useful if you want to restart a course or chapter</li>
+</ul><p></p>
+<h1><b>Debugging Practice</b></h1>
+<p>I want to walk you through how I approach writing code, complete with all the debugging steps I take along the way.</p>
+<p>The goal is to write <i>small amounts of code</i>, and then <i>test</i> each bit of code to make sure it's doing what we expect before moving on. <b>Trying to write entire programs at once is a recipe for pain and suffering.</b> The goal is to write a few lines, test them, and then write a few more lines, and repeat until you're done.</p>
+<p>This isn't a technique that's unique to beginners. Even senior engineers write code this way.</p>
+<p><b>Assignment</b></p>
+<p>Let's complete the unlock_achievement function. It accepts 3 arguments:</p>
+<ul><li>before_xp: int</li>
+<li>ach_xp: int</li>
+<li>ach_name: str</li>
+</ul><p>It should return 2 values:</p>
+<ul><li>The player's xp after the achievement is unlocked (The sum of before_xp and ach_xp)</li>
+<li>An alert message that says "Achievement Unlocked: ACHIEVEMENT_NAME", where ACHIEVEMENT_NAME is the name of the achievement</li>
+</ul><p>Let's start by running the code in its current state. You should see an error like this:</p>
+<p>IndentationError: expected an indented block after function definition</p>
+<p>Hmm... looks like we're getting a syntax error: Python doesn't allow you to have an empty function body. To get past this error, let's just return two dummy values from the function:</p>
+<p>def unlock_achievement(before_xp, ach_xp, ach_name):</p>
+<blockquote><p>return None, None</p>
+</blockquote><p>Run the code again. This time you shouldn't get a syntax error, but your tests should fail because you're returning the incorrect values. Let's fix that.</p>
+<p>Let's start by calculating the new amount of xp. Update the function body:</p>
+<p>def unlock_achievement(before_xp, ach_xp, ach_name):</p>
+<blockquote><p>after_xp = before_xp - ach_xp</p>
+<p>print("After xp:", after_xp)</p>
+<p>return None, None</p>
+</blockquote><p>Run the code again. This time you should see the after_xp value printed to the console. Does it look correct? It shouldn't... we have a bug! The after_xp should be the <i>sum</i> of the before_xp and ach_xp values. Fix the code and run it again to make sure it's working.</p>
+<p>Once that's working, remove the print statement and return the after_xp value instead of the first None. Run the code again. You should see that your tests are closer: The first "expected" and "actual" values should match for each test. The second return value is still broken, let's fix it!</p>
+<p>Now that we have the after_xp value, we need to create an alert message. Update the function body:</p>
+<p>def unlock_achievement(before_xp, ach_xp, ach_name):</p>
+<blockquote><p>after_xp = before_xp + ach_xp</p>
+<p>alert = "Achievement: " + ach_name</p>
+<p>print(alert)</p>
+<p>return after_xp, None</p>
+</blockquote><p>Run the code. Is the console output what you expect? We want the alert to say:</p>
+<p>Achievement Unlocked: ACHIEVEMENT_NAME</p>
+<p>Looks like the output is missing the word "Unlocked". Fix the bug, then run the code again to make sure it's working.</p>
+<p>When you're confident, remove the print statement and return the alert value instead of the second None. Run the code again. You should see that your tests are passing!</p>
+<p>Now that your tests are passing, submit your code so that it runs against <i>all</i> the test cases. Remember, when you "run" instead of submit you're only able to see a few of the tests. The submit button will run <i>all</i> the tests, which might catch bugs you didn't know you had! That's why it's important to debug with print statements and the run button before submitting.</p>
+<pre><code>def unlock_achievement(before_xp, ach_xp, ach_name):
+after_xp = before_xp + ach_xp
+alert = "Achievement Unlocked: " + ach_name
+return after_xp, alert
+</code></pre><p><b>Stack Trace</b></p>
+<p>A stack trace (or "traceback") is a scary-looking error message that the Python interpreter prints to the console when it encounters certain problems. Stack traces are most common (at least for you right now) when you're trying to run invalid Python code.</p>
+<p>You need to get used to figuring out scary error messages as a programmer. We might as well start now.</p>
+<p><b>Assignment</b></p>
+<p>Go ahead and run the code in its current state. You should see something like this:</p>
+<p>PythonError: Traceback (most recent call last):</p>
+<p>  File "&lt;exec&gt;", line 17, in &lt;module&gt;</p>
+<p>  File "&lt;string&gt;", line 1, in &lt;module&gt;</p>
+<p>  File "/home/pyodide/main.py", line 3</p>
+<blockquote><p>msg = f"You have {strength} strength, {wisdom} wisdom, and {dexterity} dexterity for a total of {total} stats.</p>
+<p>  ^</p>
+</blockquote><p>IndentationError: unindent does not match any outer indentation level</p>
+<blockquote><p>1	PythonError: Traceback (most recent call last):</p>
+</blockquote><p>This is a standard header that's just letting us know that a Python traceback is what we're looking at.</p>
+<blockquote><p>2	File "&lt;exec&gt;", line 17, in &lt;module&gt; and File "&lt;string&gt;", line 1, in &lt;module&gt;</p>
+</blockquote><p>This is the start of the "trace". These strange "&lt;exec&gt;" and "&lt;string&gt;" files don't really exist, the Python interpreter is letting us know about them because they have to do with how your code is executed in a virtual browser-based environment.</p>
+<blockquote><p>3	File "/home/pyodide/main.py", line 3</p>
+</blockquote><p>Now we're getting to the real meat of the error message! The purpose of a "trace" is to show us the path that the Python interpreter took through our code before it encountered the error, which can help us figure out what went wrong.</p>
+<p>In this case, the interpreter was executing the code in the main.py file, and it got to line 3 before it encountered the error.</p>
+<blockquote><p>4	msg = f"You have {strength} strength, {wisdom} wisdom, and {dexterity} dexterity for a total of {total} stats.</p>
+</blockquote><p>This is the line of code that caused the error.</p>
+<blockquote><p>5	IndentationError: unindent does not match any outer indentation level</p>
+</blockquote><p>This is the type of error that was raised. In this case, it's an IndentationError, which means that the Python interpreter was expecting a certain amount of indentation (whitespace at the beginning of the line) but it didn't get what it was expecting.</p>
+<p><b>Don't be fooled!</b> The proper amount of indentation in Python is 4 spaces (or one &lt;tab&gt; stroke). In this case, line 2 is actually indented 6 spaces, which is why the interpreter is confused. Fix line 2.</p>
+<p>Run the code again. You should see another error, this time the last few lines are something like:</p>
+<p>msg = f"You have {strength} strength, {wisdom} wisdom, and {dexterity} dexterity for a total of {total} stats.</p>
+<blockquote><p> ^</p>
+</blockquote><p>SyntaxError: unterminated string literal (detected at line 3)</p>
+<p>Now we have a SyntaxError, which is just a more general type of error related to invalid code. Take a close look at line 3 and fix the problem.</p>
+<pre><code>def create_stats_message(strength, wisdom, dexterity):
+total = strength + wisdom + dexterity
+msg = f"You have {strength} strength, {wisdom} wisdom, and {dexterity} dexterity for a total of {total} stats.
+return msg
+</code></pre><blockquote><p></p>
+</blockquote><h1><b>Python Numbers</b></h1>
+<h3>In Python, numbers without a decimal point are called Integers - just like they are in mathematics.</h3>
+<h3>Integers are simply whole numbers, positive or negative. For example, 3 and -3 are both examples of integers.</h3>
+<h3>Arithmetic can be performed as you might expect:</h3>
+<h3><b>Addition</b></h3>
+<h3>2 + 1</h3>
+<h3>3</h3>
+<h3><b>Subtraction</b></h3>
+<h3>2 - 1</h3>
+<h3>1</h3>
+<h3><b>Multiplication</b></h3>
+<h3>2 * 2</h3>
+<h3>4</h3>
+<h3><b>Division</b></h3>
+<h3>3 / 2</h3>
+<h3>1.5 (a float)</h3>
+<h3>This one is actually a bit different - division on two integers will actually produce a <a href="https://docs.python.org/3/tutorial/floatingpoint.html">float</a>. A float is, as you may have guessed, the number type that allows for decimal values.</h3>
+<h3><b>Assignment</b></h3>
+<h3>Complete the missing sections of the calculate_damage function.</h3>
+<h3>Fix the total_damage variable so that it contains the sum of all the different weapons' and spells' damage values.</h3>
+<h3>Fix the average_damage variable so that it contains the <a href="https://en.wikipedia.org/wiki/Average">average</a> of the combined weapon and spell damage.</h3>
+<p></p>
+<pre><code>def calculate_damage(sword, arrow, spear, dagger, fireball):
+total_damage = sword + arrow + spear + dagger + fireball
+average_damage = total_damage / 5
+return total_damage, average_damage
+</code></pre><h1><i>Numbers Review</i></h1>
+<pre><code>
+Integers
+In Python, numbers without a decimal point are called Integers.
+Integers are simply whole numbers, positive or negative. For example, 3 and -3 are both examples of integers.
+
+Floats
+A float is, as you may have guessed, the number type that allows for decimal values.
+my_int = 5
+my_float = 5.5
+Floor Division
+Python has great out-of-the-box support for mathematical operations. This, among other reasons, is why it has had such success in artificial intelligence, machine learning, and data science applications.
+Floor division is like normal division except the result is floored afterward, which means the result is rounded down to the nearest integer. The // operator is used for floor division.
+7 // 3
+# 2 (an integer, rounded down from 2.333)
+-7 // 3
+# -3 (an integer, rounded down from -2.333)
+Exponents
+Python has built-in support for exponents - something most languages require a math library for.
+# reads as "three squared" or
+# "three raised to the second power"
+3 ** 2
+# 9
+EX
+VIDEO
+
+Changing in Place
+It's fairly common to want to change the value of a variable based on its current value.
+player_score = 4
+player_score = player_score + 1
+# player_score now equals 5
+
+player_score = 4
+player_score = player_score - 1
+# player_score now equals 3
+
+Don't let the fact that the expression player_score = player_score - 1 is not a valid mathematical expression be confusing. It doesn't matter, it is valid code. It's valid because the way the expression should be read in English is:
+Assign to player_score the current value of player_score minus 1
+In this operation, the right-hand side (player_score - 1) is calculated first. Once we have the result, we update player_score with this new value.
+
+Assignment
+Complete the update_player_score function. It should add increment to current_score and then return the new current_score.
+
+def update_player_score(current_score, increment):
+    current_score = current_score + increment
+    return current_score
+
+Solution
+
+---------------------------------
+Inputs: 0, 100
+Expecting: 100
+Actual: 100
+Pass
+---------------------------------
+Inputs: 100, 200
+Expecting: 300
+Actual: 300
+Pass
+---------------------------------
+Inputs: 300, 300
+Expecting: 600
+Actual: 600
+Pass
+---------------------------------
+Inputs: 600, 50
+Expecting: 650
+Actual: 650
+Pass
+---------------------------------
+Inputs: 0, 0
+Expecting: 0
+Actual: 0
+Pass
+---------------------------------
+Inputs: 1, 1
+Expecting: 2
+Actual: 2
+Pass
+---------------------------------
+Inputs: 100, -50
+Expecting: 50
+Actual: 50
+Pass
+============= PASS ==============
+7 passed, 0 failed
+</code></pre>
+
+
+
+<hr>
+
+<h1>BOOT.DEV DAY 3</h1>
+<h1><b>Bitwise “&” Operator</b></h1>
+<p>Bitwise operators are similar to logical operators, but instead of operating on boolean values, they apply the same logic to all the bits in a value by column. For example, say you had the numbers 5 and 7 represented in <a href="https://en.wikipedia.org/wiki/Binary_code">binary</a>. You could perform a bitwise AND operation and the result would be 5.</p>
+<ul><li>0101 is 5</li>
+<li>0111 is 7</li>
+</ul><p>0101</p>
+<p>&</p>
+<p>0111</p>
+<p>=</p>
+<p>0101</p>
+<p>A 1 in binary is the same as True, while 0 is False. So really a bitwise operation is just a bunch of logical operations that are completed in tandem by column.</p>
+<p>0 & 0 = 0</p>
+<p>1 & 1 = 1</p>
+<p>1 & 0 = 0</p>
+<p>Ampersand & is the bitwise AND operator in Python. "AND" is the <i>name</i> of the bitwise operation, while ampersand & is the <i>symbol</i> for that operation. For example, 5 & 7 = 5, while 5 & 2 = 0.</p>
+<ul><li>0101 is 5</li>
+<li>0010 is 2</li>
+</ul><p>0101</p>
+<p>&</p>
+<p>0010</p>
+<p>=</p>
+<p>0000</p>
+<p></p>
+<p><b>Binary Notation</b></p>
+<p>When writing a number in binary, the prefix 0b is used to indicate that what follows is a binary number. 0b10 is two in binary, but 10 without the 0b prefix is simply ten.</p>
+<ul><li>0b0101 is 5</li>
+<li>0b0111 is 7</li>
+</ul><p><b>Putting It Together</b></p>
+<p>0b0101 & 0b0111</p>
+<h1>equals 5</h1>
+<p>binary_five = 0b0101</p>
+<p>binary_seven = 0b0111</p>
+<p>binary_five & binary_seven</p>
+<h1>equals 5</h1>
+<p><b>Guild Permissions</b></p>
+<p>Sometimes applications store user permissions as binary values. If I have 4 different permissions a user can have, then I can store that as a 4-digit binary number, and if a certain bit is present, I know the permission is enabled. This can be a lot more efficient than storing entire strings.</p>
+<p>Let's pretend we have 4 permissions related to "guilds" in Fantasy Quest ("guild" is just a fancy videogame word for "team"):</p>
+<ul><li>can_create_guild - Leftmost bit (0b1000)</li>
+<li>can_review_guild - Second to leftmost bit (0b0100)</li>
+<li>can_delete_guild - Second to rightmost bit (0b0010)</li>
+<li>can_edit_guild - Rightmost bit (0b0001)</li>
+</ul><p>If a user has <i>no</i> permissions, their binary permissions would be 0b0000.</p>
+<p>If a user only has the can_create_guild permission, their binary permissions would be 0b1000, but a user with can_review_guild <i>and</i> can_edit_guild permissions would be 0b0101.</p>
+<p>To check for, say, the can_review_guild permission, we can perform a bitwise AND operation on the user's permissions and the enabled can_review_guild bit (0b0100). If the result is 0b0100 again, we know they have that specific permission!</p>
+<p>user_permissions = 0b0101</p>
+<p>can_review_guild = 0b0100</p>
+<h1>perform bitwise AND to get the user's review permission</h1>
+<p>user_review_guild_permission = user_permissions & can_review_guild</p>
+<h1>check if the user's review permission is equal to <pre>can_review_guil</pre></h1>
+<p></p>
+<p><b>Assignment</b></p>
+<p>Complete each of the get_XXX_bits functions. Simply use the bitwise & operation on the input of the user's permission bits and the appropriate guild permission bits variable, and return the resulting bits for them to be checked by the tests.</p>
+<p>4 values have been provided, use the appropriate one for each function:</p>
+<ul><li>can_create_guild</li>
+<li>can_review_guild</li>
+<li>can_delete_guild</li>
+<li>can_edit_guild</li>
+</ul><p>The get_XXX_bits functions return the bits and the test code compares the result to the original permission value to see if it matches!</p>
+<p></p>
+<pre><code>can_create_guild = 0b1000
+can_review_guild = 0b0100
+can_delete_guild = 0b0010
+can_edit_guild = 0b0001
+
+def get_create_bits(user_permissions):
+user_permissions = can_create_guild & user_permissions
+return user_permissions
+
+def get_review_bits(user_permissions):
+user_permissions = can_review_guild & user_permissions
+return user_permissions
+
+def get_delete_bits(user_permissions):
+user_permissions = can_delete_guild & user_permissions
+return user_permissions
+def get_edit_bits(user_permissions):
+user_permissions = can_edit_guild &user_permissions
+return user_permissions
+</code></pre><p> </p>
+<p>Inputs: 0110</p>
+<p>Expecting can_create: False</p>
+<p>Expecting can_review: True</p>
+<p>Expecting can_delete: True</p>
+<p>Expecting can_edit: False</p>
+<p>Actual can_create: False</p>
+<p>Actual can_review: True</p>
+<p>Actual can_delete: True</p>
+<p>Actual can_edit: False</p>
+<p>Pass</p>
+<p> </p>
+<p>Inputs: 1111</p>
+<p>Expecting can_create: True</p>
+<p>Expecting can_review: True</p>
+<p>Expecting can_delete: True</p>
+<p>Expecting can_edit: True</p>
+<p>Actual can_create: True</p>
+<p>Actual can_review: True</p>
+<p>Actual can_delete: True</p>
+<p>Actual can_edit: True</p>
+<p>Pass</p>
+<p> </p>
+<p>Inputs: 0000</p>
+<p>Expecting can_create: False</p>
+<p>Expecting can_review: False</p>
+<p>Expecting can_delete: False</p>
+<p>Expecting can_edit: False</p>
+<p>Actual can_create: False</p>
+<p>Actual can_review: False</p>
+<p>Actual can_delete: False</p>
+<p>Actual can_edit: False</p>
+<p>Pass</p>
+<p> </p>
+<p>Inputs: 1001</p>
+<p>Expecting can_create: True</p>
+<p>Expecting can_review: False</p>
+<p>Expecting can_delete: False</p>
+<p>Expecting can_edit: True</p>
+<p>Actual can_create: True</p>
+<p>Actual can_review: False</p>
+<p>Actual can_delete: False</p>
+<p>Actual can_edit: True</p>
+<p>Pass</p>
+<p> </p>
+<p>Inputs: 1000</p>
+<p>Expecting can_create: True</p>
+<p>Expecting can_review: False</p>
+<p>Expecting can_delete: False</p>
+<p>Expecting can_edit: False</p>
+<p>Actual can_create: True</p>
+<p>Actual can_review: False</p>
+<p>Actual can_delete: False</p>
+<p>Actual can_edit: False</p>
+<p>Pass</p>
+<p> </p>
+<p>Inputs: 0100</p>
+<p>Expecting can_create: False</p>
+<p>Expecting can_review: True</p>
+<p>Expecting can_delete: False</p>
+<p>Expecting can_edit: False</p>
+<p>Actual can_create: False</p>
+<p>Actual can_review: True</p>
+<p>Actual can_delete: False</p>
+<p>Actual can_edit: False</p>
+<p>Pass</p>
+<p> </p>
+<p>Inputs: 0010</p>
+<p>Expecting can_create: False</p>
+<p>Expecting can_review: False</p>
+<p>Expecting can_delete: True</p>
+<p>Expecting can_edit: False</p>
+<p>Actual can_create: False</p>
+<p>Actual can_review: False</p>
+<p>Actual can_delete: True</p>
+<p>Actual can_edit: False</p>
+<p>Pass</p>
+<p> </p>
+<p>Inputs: 0001</p>
+<p>Expecting can_create: False</p>
+<p>Expecting can_review: False</p>
+<p>Expecting can_delete: False</p>
+<p>Expecting can_edit: True</p>
+<p>Actual can_create: False</p>
+<p>Actual can_review: False</p>
+<p>Actual can_delete: False</p>
+<p>Actual can_edit: True</p>
+<p>Pass</p>
+<p>============= PASS ==============</p>
+<p>8 passed, 0 failed</p>
+<p></p>
+<p><b>Bitwise “|” Operator</b></p>
+<p>As you may have guessed, the bitwise "or" operator is similar to the bitwise "and" operator in that it works on binary rather than boolean values. However, the bitwise "or" operator "or"s the bits together. Here's an example:</p>
+<ul><li>0101 is 5</li>
+<li>0111 is 7</li>
+</ul><p>0101</p>
+<p>|</p>
+<p>0111</p>
+<p>=</p>
+<p>0111</p>
+<p>A 1 in binary is the same as True, while 0 is False. So a bitwise operation is just a bunch of logical operations that are completed in tandem. When two binary numbers are "or"ed together, the result has a 1 in any place where <i>either</i> of the input numbers has a 1 in that place.</p>
+<p>| is the bitwise "or" operator in Python. 5 | 7 = 7 and 5 | 2 = 7 as well!</p>
+<ul><li>0101 is 5</li>
+<li>0010 is 2</li>
+</ul><p>0101</p>
+<p>|</p>
+<p>0010</p>
+<p>=</p>
+<p>0111</p>
+<p></p>
+<p><b>Guild Permissions</b></p>
+<p>A "guild" is a team of 2-4 players. Here are the guild-specific permissions:</p>
+<ul><li>can_invite - Leftmost bit (0b1000)</li>
+<li>can_kick - Second to leftmost bit (0b0100)</li>
+<li>can_enter_dungeon - Second to rightmost bit (0b0010)</li>
+<li>can_surrender - Rightmost bit (0b0001)</li>
+</ul><p>When players are in a guild together, they gain <i>all</i> the permissions of <i>all</i> the other members of the guild!</p>
+<p>For example, if:</p>
+<ul><li>Jack has the can_invite permission: 0b1000</li>
+<li>Jill has the can_kick permission: 0b0100</li>
+</ul><p>Then, when they are partied together, they should both have the can_invite and can_kick permissions: 0b1100.</p>
+<p><b>Assignment</b></p>
+<p>Complete the calculate_guild_perms function. It takes as input four binary numbers representing the separate permissions of each member of the guild: glorfindel, galadriel, elendil and elrond. It should return a single binary number that represents the combined permissions of <i>all</i> the members of the guild.</p>
+<p>Use a series of bitwise "or" operations to calculate the <a href="https://www.youtube.com/watch?v=1wsF9GpGd00">superset</a> of all the member's permissions.</p>
+<p><b>Tip</b></p>
+<p>You can chain the "or" operator.</p>
+<p></p>
+<p></p>
+<p><b>Boots</b></p>
+<p><b>Spellbook</b></p>
+<p><b>Community</b></p>
+<p></p>
+<p>￼</p>
+<p><b>Need help?</b> I, Boots the Gormless Glutton, can assist <i>without penalty</i>!</p>
+<p><a href="https://www.boot.dev/u/uselesssort47">￼</a></p>
+<p>explain this code</p>
+<p>￼</p>
+<p>Excellent work! Your code is working perfectly. Let me break down what's happening:</p>
+<p>def calculate_guild_perms(glorfindel, galadriel, elendil, elrond):</p>
+<blockquote><p>a = glorfindel | galadriel | elendil | elrond</p>
+<p>return a</p>
+</blockquote><p><b>What the code does:</b></p>
+<blockquote><p>1	Takes four parameters representing each guild member's individual permissions as binary numbers</p>
+<p>2	Uses the bitwise OR operator (|) to combine all four permission sets</p>
+<p>3	Returns the combined permissions</p>
+</blockquote><p><b>How the bitwise OR works:</b> The | operator compares each bit position and returns 1 if <i>any</i> of the input numbers has a 1 in that position. This creates a "superset" of all permissions.</p>
+<p><b>Let's trace through the test cases:</b></p>
+<p><b>Test 1:</b> glorfindel=1, galadriel=2, elendil=1, elrond=11</p>
+<ul><li>1 = 0b0001 (can_surrender)</li>
+<li>2 = 0b0010 (can_enter_dungeon)</li>
+<li>1 = 0b0001 (can_surrender)</li>
+<li>11 = 0b1011 (can_invite + can_enter_dungeon + can_surrender)</li>
+</ul><p>When OR'd together: 0b0001 | 0b0010 | 0b0001 | 0b1011 = 0b1011 = 11</p>
+<p><b>Test 3:</b> glorfindel=9, galadriel=2, elendil=13, elrond=11</p>
+<ul><li>9 = 0b1001 (can_invite + can_surrender)</li>
+<li>2 = 0b0010 (can_enter_dungeon)</li>
+<li>13 = 0b1101 (can_invite + can_kick + can_surrender)</li>
+<li>11 = 0b1011 (can_invite + can_enter_dungeon + can_surrender)</li>
+</ul><p>Result: 0b1111 = 15 (all four permissions!)</p>
+<p>Your solution correctly gives the guild the union of all individual member permissions!</p>
+<p></p>
+<p><b>Damage Meter</b></p>
+<p>You've been working with a group of interns to build a damage meter for Fantasy Quest... it's not going well.</p>
+<p><b>Assignment</b></p>
+<p><b>Fix the interns' syntax error</b>. The calculate_dps function should accept two arguments, but due to a syntax error, it's being called with 4 instead. Use the proper <a href="https://peps.python.org/pep-0515/">delimiter</a> for thousands so that the numbers are still easy to parse visually.</p>
+<p>The two numbers should be:</p>
+<ul><li>damage: 8 million, time: 45</li>
+<li>damage: 10 million, time: 49</li>
+</ul><h1>CODE:</h1>
+<pre><code>def main():
+calculate_dps(8_000_000, 45)
+calculate_dps(10_000_000, 49)
+def calculate_dps(damage, time):
+dps = damage / time
+print(f"Damage per second: {dps}")
+print("=====================================")
+</code></pre><p><b>Solution</b></p>
+<p>Damage per second: 177777.77777777778</p>
+<p></p>
+<p>Damage per second: 204081.6326530612</p>
+<p></p>
+<p><b>If Practice</b></p>
+<p>Remember, you can use the == operator to check if two values are equal. For example:</p>
+<p>is_equal = 5 == 5</p>
+<h1>is_equal is True</h1>
+<p></p>
+<p><b>Assignment</b></p>
+<p>Complete the check_swords_for_army function. If the number of swords and the number of soldiers match, return the string:</p>
+<p>correct amount</p>
+<p>Otherwise, return the string:</p>
+<p>incorrect amount</p>
+<p>Punctuation matters! Make sure you return the strings exactly as they appear above.</p>
+<p><b>Tip</b></p>
+<p>You only need to use one if statement and two return statements to complete the function.</p>
+<pre><code>def check_swords_for_army(number_of_swords, number_of_soldiers):
+is_equal = number_of_swords == number_of_soldiers
+if is_equal:
+return("correct amount")
+else:
+return("incorrect amount")
+# instead of print write return for a true or false or any other specific situations
+
+If-Else
+An if statement can be followed by zero or more elif (which stands for "else if") statements, which can be followed by zero or one else statements.
+For example:
+if score &gt; high_score:
+    print("High score beat!")
+elif score &gt; second_highest_score:
+    print("You got second place!")
+elif score &gt; third_highest_score:
+    print("You got third place!")
+else:
+    print("Better luck next time")
+
+First the if statement is evaluated. If it is True then the if statement's body is executed and all the other elifs and the else are ignored.
+If the first if is false then the next elif is evaluated. Likewise, if it is True then its body is executed and the rest are ignored.
+If none of the if or elif statements evaluate to True then the final else statement will be the only body executed.
+
+Assignment
+Complete the player_status function. If the player's health is less than or equal to 0, return the string:
+dead
+
+Otherwise, if it's less than or equal to 5 return the string:
+injured
+
+Otherwise, return the string:
+healthy
+#code
+def player_status(health):
+    if health &lt;= 0:
+        return("dead")
+    elif health &lt;= 5:
+        return("injured")
+    else:
+        return("healthy")
+If-Else Practice
+Here are some basic rules with if/else blocks.
+•	You can't have an elif or an else without an if
+•	You can have an else without an elif
+
+Assignment
+Complete the check_high_score function. If the player_name matches the high score name, return the string:
+high
+
+Otherwise, if it's the low scorer, return the string:
+low
+
+Otherwise, return the string:
+neither
+def check_high_score(player_name, high_scoring_player_name, low_scoring_player_name):
+    if player_name == high_scoring_player_name:
+        return "high"
+    elif player_name == low_scoring_player_name:
+        return "low"
+    else:
+        return "neither"
+</code></pre><h1>Boolean Quiz</h1>
+<pre><code>Refer to the following boolean statement:
+
+is_tall = True
+is_fat = True
+is_skinny = False
+is_short = False
+result = (is_tall and is_fat) or (is_skinny and is_short)
+Explain the solution to this multiple choice question, I don't quite understand why this is the answer.
+
+Boots
+Certainly! Let's review the code from the lesson:
+
+is_tall = True
+is_fat = True
+is_skinny = False
+is_short = False
+result = (is_tall and is_fat) or (is_skinny and is_short)
+
+We want to know what value result will have.
+
+Let's walk through it step by step:
+
+First, evaluate the parentheses.
+
+(is_tall and is_fat)
+Both are True, so the result is True.
+(is_skinny and is_short)
+Both are False, so the result is False.
+So now it looks like this:
+
+result = True or False
+Evaluate the or operator:
+
+If either side of the or is True, the result is True.
+Therefore, result is True.
+
+</code></pre><h1>Combat Advantage</h1>
+<pre><code>Fantasy Quest doesn't have any way for players to know if they are strong enough to hold their own against certain enemies.
+•	If a player's power level is greater than the enemy's defense, that player has an "advantage"
+•	If the player's power and enemy's defense are equal, they are "evenly matched"
+•	Otherwise, that player has a "disadvantage".
+
+Assignment
+On line 4 write an if/elif/else block. Using the rules specified above, set advantage, disadvantage, or evenly_matched to True depending on the values of player_power and enemy_defense.
+For example, if the player's power is greater than the enemy's defense, advantage should be set to True. etc.
+
+def combat_evaluation(player_power, enemy_defense):
+    advantage, disadvantage, evenly_matched = False, False, False
+
+    if player_power &gt; enemy_defense:
+        advantage = True
+    elif player_power &lt; enemy_defense:
+        disadvantage = True
+    else:
+        evenly_matched = True
+
+    return advantage, disadvantage, evenly_matched
+
+
+
+
+</code></pre><h1></h1>
+<h1></h1>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+
+
+
+
+<hr>
+
+<h1>SQL CODING EXCERCISES </h1>
+<p><b>Write a SQL Query to Calculate New Salaries</b></p>
+<p>Assume that the company you work in wants to <b>increase </b>the <b>salaries by 20% </b>this year, and also wants to <b>add 1000 as bonus </b>to each salary <b>after 20% increase</b>. Based on this information, write a SQL query that returns the new salaries from the <b>EMPLOYEES </b>table.</p>
+<p>Your query should return the employee_id, salary and new_salary columns.(new_salary should be the alias for the calculated salary)</p>
+<pre><code>select
+employee_id,
+salary,
+(salary * 1.20 +1000) AS new_salary
+FROM
+EMPLOYEES;
+</code></pre><p>Here is the correct SQL query for the coding exercise:</p>
+<pre><code>SELECT employee_id, salary, salary * 1.2 + 1000 AS new_salary FROM employees;
+</code></pre><p>The SQL query above selects the "employee_id", "salary" columns, and "new_salary" by using arithmetic operations from the "employees" table. The "new_salary" column is calculated using the formula "salary * 1.2 + 1000", where the current salary is multiplied by 1.2 (<b>20% raise</b>) and then the bonus, <b>1000 </b>is added to the result. The keyword "SELECT" is used to specify the columns that you want to retrieve, "FROM" is used to specify the table that you are retrieving data from.</p>
+<p>The end result is a list of employee_id, salary and calculated new_salary from the employees table.</p>
+<p><b>Write a SQL Query to Fetch the Employees Working as Sales Managers</b></p>
+<p>Based on the EMPLOYEES table you've learned in this course, write a query that returns the employees who work as a sales manager (SA_MAN).</p>
+<p>The query should include the following columns : EMPLOYEE_ID, FIRST_NAME, LAST_NAME</p>
+<pre><code>SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME FROM EMPLOYEES WHERE JOB_ID = 'SA_MAN';
+
+
+COMPARISON CLAUSES/OPERATORS:
+&lt;,&gt;,=,&lt;=,&gt;=,&lt;&gt;,!=, BETWEEN ... AND, LIKE, IS NULL
+</code></pre><p><b>Type a SQL Query which Returns the Employees who Work as Sales People</b></p>
+<p>Write a SQL query that returns the employees who have <b>SALES</b>-related job IDs based on the data in the <b>EMPLOYEES </b>table.</p>
+<ul><li>Here, you are expected to use the <b>IN operator</b></li>
+<li>The selected column list will be : <b>employee_id</b>, <b>first_name</b>, <b>last_name</b>, <b>job_id</b></li>
+</ul><p><b>Tip</b>: We know that the sales employees are the employees that must have the <b>'SA_MAN'</b> or <b>'SA_REP'</b> job titles(IDs).</p>
+<pre><code>SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, JOB_ID FROM EMPLOYEES
+WHERE JOB_ID IN ('SA_MAN', 'SA_REP')
+</code></pre><h1>Bring the second top 10 orders</h1>
+<pre><code>Assume that you are asked to bring a report which returns the second top 10 orders by their order amounts. That basically means, after ordering the rows by the order_total values, you will skip the first 10 rows and return the next 10 rows.
+Here, you will use the orders table. The returning columns will be order_id, order_total and customer_id.
+Note: You should use NEXT keyword instead of FIRST keyword while using the FETCH clause due to the restrictions within the platform here.
+</code></pre><p>CODE ANSWER:</p>
+<pre><code>select ORDER_ID, ORDER_TOTAL, CUSTOMER_ID FROM ORDERS ORDER BY ORDER_TOTAL DESC OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY
+</code></pre><h1><b>Return the managers who earn less than 10000</b></h1>
+<p>Assume that the company wants to see if any managers earn less than 10000. Because they want to increase their salaries to 10000.</p>
+<p>So here, you are asked to write a SQL query that returns the employees who work as a manager by using the job_id column in the employees table. You did such an example before. But this time, you are asked to return the managers who earn less than 10000.</p>
+<p>We assume that you don't know the job_id values for the managers, but you know that the job_id values for the managers end with the text : <b>MAN</b></p>
+<p>The selected columns should be : employee_id, first_name, last_name, salary</p>
+<p>CODE:</p>
+<pre><code>SELECT employee_id, first_name, last_name, salary FROM employees WHERE job_id LIKE "%MAN" AND SALARY &lt;10000;
+</code></pre><p>In this coding exercise, you are asked to return the rows with the order of <b>department_id </b>and <b>salary</b>. But notice that the rows first should be ordered based on the <b>department_id </b>column <b>in ascending order</b>,  and these rows should be ordered by the <b>salary </b>column <b>in descending order</b>.</p>
+<p>Your query should return the <b>employee_id, department_id</b>and <b>salary </b>columns.</p>
+<pre><code>SELECT employee_id, department_id, salary FROM employees ORDER BY department_id ASC, salary DESC;
+
+</code></pre><pre>Case Conversion functions
+- Lower functio: Converts all the input characters to lowercase characters. 
+-Upper function: Converts all the input characters to upper case characters.
+-Initcap Function- converts first letters of each word to upper case and rest of them to lowercase.
+</pre>
+
+
+    </body>
+</html>
