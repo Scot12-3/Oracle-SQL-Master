@@ -1,0 +1,187 @@
+--1 . Create the Table
+'''sql
+create table running_log (
+   run_date       date not null,
+   time_in_s      int  not null,
+   distance_in_km int  not null);
+
+--2 . Load the Data
+```sql
+begin
+insert into running_log values (date'2020-04-01', 310, 1);
+insert into running_log values (date'2020-04-02', 1600, 5);
+insert into running_log values (date'2020-04-03', 3580, 11);
+insert into running_log values (date'2020-04-06', 1550, 5);
+insert into running_log values (date'2020-04-07', 300, 1);
+insert into running_log values (date'2020-04-10', 280, 1);
+insert into running_log values (date'2020-04-13', 1530, 5);
+insert into running_log values (date'2020-04-14', 295, 1);
+insert into running_log values (date'2020-04-15', 292, 1);
+
+insert into running_log values (date'2020-04-17', 1510, 5);
+insert into running_log values (date'2020-04-18', 289, 1);
+insert into running_log values (date'2020-04-19', 302, 1);
+insert into running_log values (date'2020-04-20', 1545, 5);
+insert into running_log values (date'2020-04-21', 595, 2);
+insert into running_log values (date'2020-04-22', 281, 1);
+
+insert into running_log values (date'2020-04-24', 600, 2);
+insert into running_log values (date'2020-04-25', 589, 2);
+insert into running_log values (date'2020-04-27', 301, 1);
+insert into running_log values (date'2020-04-28', 2430, 8);
+insert into running_log values (date'2020-04-29', 599, 2);
+insert into running_log values (date'2020-04-30', 330, 1);
+commit;
+end;
+
+/
+
+--3 . select
+```sql
+select * from running_log;
+--4 . Find Consecutive Rows
+select *     
+from   running_log match_recognize (    
+  order by run_date    
+  measures     
+    first ( run_date ) as start_date,    
+    count (*) as days    
+  pattern ( init consecutive* )    
+  define consecutive as run_date = ( prev ( run_date ) + 1 )    
+);
+
+  
+--5 . Find Three Consecutive Rows
+select *     
+from   running_log match_recognize (   
+  order by run_date    
+  measures     
+    first ( run_date ) as start_date,    
+    count (*) as days   
+  all rows per match  
+  pattern ( init consecutive{2} )    
+  define consecutive as run_date = ( prev ( run_date ) + 1 )    
+);
+--6 . Show All the Consecutive Rows
+select *     
+from   running_log match_recognize (   
+  order by run_date    
+  measures     
+    first ( run_date ) as start_date,    
+    count (*) as days   
+  all rows per match  
+  pattern ( init consecutive{2} )    
+  define consecutive as run_date = ( prev ( run_date ) + 1 )    
+);
+--7 . Include Unmatched Rows
+select *     
+from   running_log match_recognize (    
+  order by run_date    
+  measures     
+    first ( run_date ) as start_date,    
+    count (*) as days_so_far,  
+    final count (*) as total_days,  
+    classifier() as variable  
+  all rows per match with unmatched rows  
+  pattern ( init consecutive{2} )    
+  define consecutive as run_date = ( prev ( run_date ) + 1 )    
+);
+--8 . A SQL Macro to Return N Rows from a Table
+create or replace function top_n (  
+  tab dbms_tf.table_t, num_rows number  
+) return varchar2 sql_macro is  
+begin  
+  return 'select * from top_n.tab  
+    fetch first top_n.num_rows   
+      rows only';  
+end top_n;
+--9. Calling a sql macro
+select * from top_n (  
+  running_log, 5  
+)
+
+--10 . Passing Subqueries as Arguments
+select * from top_n (  
+  running_log, ( select 2 from dual )   
+)
+--11 . Passing a Function as an Argument
+select * from top_n (  
+  running_log, dbms_random.value ( 1, 10 )  
+)
+--12.
+select * from top_n ( 
+  running_log, dbms_random.value ( 1, 10 ) 
+)
+--13.
+select * from top_n ( 
+  running_log, dbms_random.value ( 1, 10 ) 
+)
+--14 . Get the Final SQL Statement
+declare  
+  l_clob clob;  
+begin  
+  dbms_utility.expand_sql_text (  
+    input_sql_text  => q'!select * from top_n (  
+  running_log, dbms_random.value ( 1, 10 )  
+)!',  
+    output_sql_text => l_clob  );  
+  dbms_output.put_line(l_clob);  
+end;
+--15 . Using Pattern Matching in SQL Macros
+create or replace function get_consecutive_rows (  
+  tab dbms_tf.table_t, col dbms_tf.columns_t  
+)  
+  return varchar2 sql_macro   
+as  
+begin  
+  return 'get_consecutive_rows.tab     
+match_recognize (    
+  order by ' || get_consecutive_rows.col ( 1 ) || '    
+  measures     
+    first ( ' || get_consecutive_rows.col ( 1 ) || ' ) as start_value,    
+    count (*) as num_rows    
+  pattern ( init consecutive* )    
+  define     
+    consecutive as ' || get_consecutive_rows.col ( 1 ) || ' = (   
+      prev ( ' || get_consecutive_rows.col ( 1 ) || ' ) + 1   
+    )    
+)';  
+end get_consecutive_rows;
+--16 . Use Pattern Matching in a SQL Macro
+select *   
+from   get_consecutive_rows (   
+  running_log, columns ( run_date )   
+);
+--17 . Invalid Column Names Rejected
+select *   
+from   get_consecutive_rows (   
+  running_log, columns ( dummy )   
+);
+--18 . Column Names Must be Identifiers
+select *   
+from   get_consecutive_rows (   
+  running_log, columns ( 'dummy' )   
+);
+--19. PASS ANY TABLE COLUMN
+select *   
+from   get_consecutive_rows (   
+  running_log, columns ( time_in_s )   
+);
+--20 . Filtering Before the Macro
+with rws as (  
+  select * from running_log  
+  where  distance_in_km = 2  
+)  
+select *   
+from   get_consecutive_rows (   
+  rws, columns ( run_date )   
+);
+
+--21 . Apply Pattern Matching to Any Tables
+with rws as (   
+  select level c1 from dual connect by level <= 10   
+  union all    
+  select level + 20 c1 from dual connect by level <= 4   
+)   
+  select *    
+  from   get_consecutive_rows ( rws, columns ( c1 ) );
