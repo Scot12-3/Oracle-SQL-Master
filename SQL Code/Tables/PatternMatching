@@ -1,12 +1,12 @@
 --1 . Create the Table
-'''sql
+--sql
 create table running_log (
    run_date       date not null,
    time_in_s      int  not null,
    distance_in_km int  not null);
 
 --2 . Load the Data
-```sql
+--sql
 begin
 insert into running_log values (date'2020-04-01', 310, 1);
 insert into running_log values (date'2020-04-02', 1600, 5);
@@ -37,7 +37,7 @@ end;
 /
 
 --3 . select
-```sql
+--sql
 select * from running_log;
 --4 . Find Consecutive Rows
 select *     
