@@ -141,3 +141,11 @@ FROM HR.EMPLOYEES
 WHERE JOB_ID = 'IT_PROG' OR SALARY >= 5000
 
 ORDER BY FIRST_NAME AND JOB_ID DESC
+
+-- The AND operator is not valid in the ORDER BY clause. Use a comma to separate multiple columns for ordering.
+SELECT FIRST_NAME, LAST_NAME, JOB_ID, SALARY
+FROM HR.EMPLOYEES 
+WHERE JOB_ID = 'IT_PROG' OR SALARY >= 5000
+ORDER BY FIRST_NAME, JOB_ID DESC
+-- Corrected the ORDER BY clause by replacing AND with a comma.
+-- This will order the results first by FIRST_NAME in ascending order, and then by JOB_ID in descending order for rows with the same FIRST_NAME.
