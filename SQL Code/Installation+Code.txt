@@ -1,4 +1,4 @@
-sqlplus sys/123@localhost:1521/orclpdb as sysdba;
+--sqlplus sys/123@localhost:1521/orclpdb as sysdba;
 alter pluggable database open;
 alter pluggable database orclpdb save state;
 create or replace directory import_dir as 'C:\SAMPLE_SCHEMAS';
@@ -13,5 +13,6 @@ alter user hr identified by hr account unlock;
 alter user sh identified by 123 account unlock;
 alter user oe identified by 123 account unlock;
 alter user pm identified by 123 account unlock;
-alter user ix identified by 123 account unlock;
-/
+alter user ix identified by 123 account unlock;--
+
+
