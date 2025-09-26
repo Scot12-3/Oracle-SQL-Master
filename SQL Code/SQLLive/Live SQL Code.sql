@@ -149,3 +149,26 @@ WHERE JOB_ID = 'IT_PROG' OR SALARY >= 5000
 ORDER BY FIRST_NAME, JOB_ID DESC
 -- Corrected the ORDER BY clause by replacing AND with a comma.
 -- This will order the results first by FIRST_NAME in ascending order, and then by JOB_ID in descending order for rows with the same FIRST_NAME.
+
+--1. CREATE A TABLE
+CREATE TABLE employees_copy AS
+SELECT * FROM hr.employees;
+--2. ADD A NEW COLUMN
+ALTER TABLE employees_copy
+ADD (department_name VARCHAR2(50));
+--3. UPDATE THE NEW COLUMN WITH A DEFAULT VALUE
+UPDATE employees_copy
+SET department_name = 'Unknown';
+--4. VERIFY THE UPDATE
+SELECT department_name, COUNT(*) AS count
+FROM employees_copy
+GROUP BY department_name;
+--5. DROP THE NEW COLUMN
+ALTER TABLE employees_copy
+DROP COLUMN department_name;
+--6. DROP THE TABLE
+DROP TABLE employees_copy;
+--7. VERIFY THE TABLE DROP
+SELECT * FROM employees_copy;
+-- This will return an error indicating that the table does not exist.
+-- The above steps demonstrate how to create a table, add a column, update it, and then clean up by dropping the column and the table.
