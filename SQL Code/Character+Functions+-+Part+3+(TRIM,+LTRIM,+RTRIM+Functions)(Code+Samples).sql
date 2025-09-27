@@ -39,3 +39,5 @@ SELECT first_name, rpad(first_name,6,'*') pad FROM employees;
 SELECT first_name, lpad(first_name,6,'*') pad FROM employees;
 SELECT first_name, lpad('My name is ',20,'-') pad FROM employees;
 SELECT first_name, lpad('My name is '||last_name ,20,'-') pad FROM employees;
+-- End of code
+SLECT first_name, rpad('My name is '||last_name ,20,'-') pad FROM employees;
