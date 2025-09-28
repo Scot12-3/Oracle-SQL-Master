@@ -1,5 +1,0 @@
---This SQL query is selecting all columns (`*`) from the `Album` table where the `Title` column starts with the letter 'A' (`Title like 'A%'`). It then orders the results by the `Title` column in ascending order.
-select * from Album
-
-where Title like 'A%'
-order by Title;
