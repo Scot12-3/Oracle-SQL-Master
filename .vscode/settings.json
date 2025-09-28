@@ -1,0 +1,11 @@
+{
+    "sqltools.useNodeRuntime": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "chinook",
+            "database": "/Users/scottmessler/Library/DBeaverData/workspace6/.metadata/sample-database-sqlite-1/Chinook.db"
+        }
+    ]
+}
